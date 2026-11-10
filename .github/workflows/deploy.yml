@@ -27,12 +27,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - id: pages
-        uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v5
       - run: npm ci
+      # The site lives at /<repo name>/. Taken from the repo itself, not configure-pages, whose
+      # base_path stayed on the old name for a while after the repo was renamed.
       - run: npm run build
         env:
-          BASE: ${{ steps.pages.outputs.base_path }}/
+          BASE: /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .vitepress/dist
